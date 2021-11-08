@@ -1,0 +1,8 @@
+<%= @grid.join(" ") %>
+
+<form action="/score" method="post">
+  <input type="text" name="word" placeholder="What is the longest word you can find?" class="form-control" >
+  <button type="submit" value="play" class="btn btn-primary mb-3">Play</button>
+  <%= hidden_field_tag :grid, @grid %>
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+</form>
