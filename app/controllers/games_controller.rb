@@ -10,22 +10,27 @@ class GamesController < ApplicationController
   end
 
 
-   def score
+  def score
     @grid = params[:grid].split
-    @word = (params[:word] || "").upcase
-    @included = included?(@word, @grid)
-    @english_word = english_word?(@word)
+    @guess = params[:word].upcase
+    @valid_word = valid_word?(@guess)
+    @in_grid = in_grid?(@guess, @grid)
   end
 
-  private
 
-  def included?(word, grid)
-    word.chars.all? { |letter| word.count(letter) <= grid.count(letter) }
+private
+
+  def in_grid?(guess, grid)
+    guess.upcase.split("").all? do |letter|
+      guess.upcase.count(letter) <= grid.count(letter)
+    end
   end
 
-  def english_word?(word)
-    response = URI.open("https://wagon-dictionary.herokuapp.com/#{word}")
-    json = JSON.parse(response.read)
+  def  valid_word?(guess)
+    url = "https://wagon-dictionary.herokuapp.com/#{guess}"
+    response = URI.open(url).read
+    json = JSON.parse(response)
     json['found']
+
   end
 end
